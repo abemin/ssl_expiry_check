@@ -3,13 +3,11 @@
 PRINT=true
 LOGGER=false
 warning_days=30
-certs_to_check='www.uitm.edu.my:443
-ufuture.uitm.edu.my:443
-'
+domain_list="/home/min/Desktop/domains.txt" #edit this
 
 $PRINT && printf "%4s %26s   %-38s %s\n" "Days" "Expires On" "Domain" "Options"
 
-for CERT in $certs_to_check
+while read CERT;
 do
 	add_opts=''
 	if [ "$(echo "$CERT" | cut -d: -f2)" -eq 25 ]; then
@@ -45,4 +43,4 @@ do
 		$LOGGER && logger -p local6.warn "cert [$CERT] is soon to expire ($days_to_expire days)"
 	fi
 	$PRINT && printf "%4i %26s   %-38s %s\033[0m\n" "$days_to_expire" "$end_date" "$CERT" "$add_opts"
-done
+done <  "$domain_list"
